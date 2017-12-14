@@ -1,20 +1,62 @@
-// check characters with library
+// get currency data
 function getTicker(currency, level, element) {
 
   //URL variables
   var HREF = window.location.href;
 
-
-
   //create URL
   var URL = HREF + "getticker?view=" + currency + "&level=" + level;
 
-  //load dictionary file
+  //get data
   httpData(URL,'GET',"", function(res){
-    generateChart(res, element);
+    transformData(res, element);
   });
 }
 
+// transform data
+function transformData(data, element) {
+
+  data = JSON.parse(data);
+  console.log('getTicker data: ', JSON.stringify(data));
+
+  var transData = {
+    title: (data.rows[0].key[0]).split("-").splice(0,2).join("-"),
+    xAxis: {
+      categories: []
+    },
+    yAxis: {
+      title: {
+        text: (data.rows[0].key[0]).split("-").join(" ")
+      }
+    },
+    series: [{
+      data: []
+    }]
+  };
+
+
+  data.rows.forEach(function(row){
+
+    //make date objects and fill transData object
+    var dateArr = [];
+    for (var i = 1; i < row.key.length; i++) {
+      dateArr.push((row.key[i]).toString());
+    }
+    console.log(dateArr);
+    var dateObj = new Date(dateArr);
+    console.log(dateObj);
+    var date = dateObj.toLocalString();
+    transData.xAxis.categories.push(date);
+
+
+    //make value and fill transData object
+    var AVG = (row.value.max + row.value.min) / 2;
+
+
+  });
+
+  generateChart(transData, element);
+}
 
 function generateChart(data, element){
 
@@ -27,23 +69,17 @@ function generateChart(data, element){
             type: 'line'
         },
         title: {
-            text: data.rows[0].key[0]
+            text: data.title
         },
         xAxis: {
-            categories: ['Apples', 'Bananas', 'Oranges']
+            categories: data.xAxis.categories
         },
         yAxis: {
             title: {
-                text: 'Fruit eaten'
+                text: data.yAxis.title.text
             }
         },
-        series: [{
-            name: 'Jane',
-            data: [1, 0, 4]
-        }, {
-            name: 'John',
-            data: [5, 7, 3]
-        }]
+        series: data.series
     });
 }
 

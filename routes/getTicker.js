@@ -3,7 +3,7 @@ var router = express.Router();
 
 //Variables
 var VIEW = "";
-var levelData = "";
+var LEVELDATA = "";
 
 //NANO
 var DBHOST = "192.168.178.2";
@@ -22,11 +22,11 @@ router.get('/', function(req, res) {
   console.log('query:',req.query);
 
   VIEWNAME = req.query.view;
-  levelData = req.query.level;
+  LEVELDATA = req.query.level;
 
 
   //check input
-  if (VIEWNAME == "" || levelData == "" ){
+  if (VIEWNAME == "" || LEVELDATA == "" ){
     res.send('Error: (part of) input qeury empty');
     res.end();
     return;
@@ -35,7 +35,7 @@ router.get('/', function(req, res) {
 else {
 
     cryptoviewdb.view(DESIGNNAME, VIEWNAME, {
-      'group_level': levelData
+      'group_level': LEVELDATA
     }, function(err, body) {
       if (!err) {
         res.send(body);
