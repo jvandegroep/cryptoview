@@ -99,10 +99,6 @@ function generateChart(data, element){
         chart: {
             renderTo: element,
             type: 'line',
-<<<<<<< HEAD
-=======
-            width: 500,
->>>>>>> 8f59bc51816a482f30b3765f9571b30949233a2b
             events: {
               load: function () {
                   // set up the updating of the chart each interval
@@ -115,14 +111,11 @@ function generateChart(data, element){
         rangeSelector : {
           inputEnabled:false
         },
-<<<<<<< HEAD
         navigator: {
           series: {
             lineColor: 'red'
           }
         },
-=======
->>>>>>> 8f59bc51816a482f30b3765f9571b30949233a2b
         exporting: {
           enabled: false
         },
