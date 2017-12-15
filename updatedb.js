@@ -13,7 +13,8 @@ var URLs = [
   "https://api.cryptonator.com/api/ticker/RDD-eur",
   "https://api.cryptonator.com/api/ticker/NLG-eur",
   "https://api.cryptonator.com/api/ticker/DGB-eur",
-  "https://api.cryptonator.com/api/ticker/STRAT-eur"
+  "https://api.cryptonator.com/api/ticker/STRAT-eur",
+  "https://api.cryptonator.com/api/ticker/LTC-eur"
 ];
 
 

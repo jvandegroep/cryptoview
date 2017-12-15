@@ -11,31 +11,6 @@ td {
   padding-left: 15px;
 }
 
-.charInput {
-  text-align: center !important;
-  width: 30px !important;
-  padding-left: 1px !important;
-  padding-right: 1px !important;
-  font-size: x-large !important;
-  text-transform:uppercase !important;
-}
-
-#numCharDiv {
-  display: none;
-}
-
-#charactersDiv {
-  display: none;
-}
-
-#outputDiv {
-  display: none;
-}
-
-#progressDiv {
-  display: none;
-}
-
-#noResult {
-  display: none;
+.row {
+  padding-bottom: 30px;
 }

@@ -44,11 +44,9 @@ router.get('/latest', function(req, res) {
       } else {
         console.log(err);
       }
-    })
+    });
   }
-
-
-})
+});
 
 
 /* GET Ticker data from db */

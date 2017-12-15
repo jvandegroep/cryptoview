@@ -138,7 +138,7 @@ function generateChart(data, element){
 */
 function updateChart(view, chart){
 
-  var view = view.split(" ").splice(0,2).join("-")
+  view = view.split(" ").splice(0,2).join("-");
 
   //URL variables
   var HREF = window.location.href;
@@ -161,10 +161,10 @@ function updateChart(view, chart){
     //create date object
     var dateObj = new Date(createDateString(dateArr));
     var date = dateObj.getTime();
-    var val = parseFloat(row.value.max.toFixed(5))
+    var val = parseFloat(row.value.max.toFixed(5));
 
     console.log('adding date and value:', date, val);
-    chart.series[2].addPoint([date, val])
+    chart.series[2].addPoint([date, val]);
 
   });
 
@@ -181,4 +181,7 @@ $(document).ready(function() {
     getTicker("RDD-EUR", 6, "graph4");
     getTicker("STRAT-EUR", 6, "graph5");
     getTicker("DGB-EUR", 6, "graph6");
+    getTicker("LTC-EUR", 6, "graph7");
+    getTicker("CLOAK-EUR", 6, "graph8");
+    getTicker("NLG-EUR", 6, "graph9");
 });
