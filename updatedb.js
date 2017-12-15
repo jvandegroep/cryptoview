@@ -22,10 +22,12 @@ function getSourceData(URL){
   request(URL, { json: true }, (err, res, body) => {
     if (err) { return console.log(err); } else {
 
-      if (body.ticker.base !== "") {
-        console.log("Response Body:", body, "\n");
-        createDoc(body);
+      if (body.ticker) {
+        if (body.ticker.base !== "") {
+          createDoc(body);
+        }
       }
+
     }
   });
 }
