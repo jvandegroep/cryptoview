@@ -1,10 +1,10 @@
-// get currency data
+/*
+* get currency data
+*/
 function getTicker(currency, level, element) {
 
   //URL variables
   var HREF = window.location.href;
-
-  //create URL
   var URL = HREF + "getticker?view=" + currency + "&level=" + level;
 
   //get data
@@ -13,7 +13,10 @@ function getTicker(currency, level, element) {
   });
 }
 
-//create a date string from array
+
+/*
+* create a date string from array
+*/
 function createDateString(array) {
 
   //add properties if array node is empty
@@ -28,7 +31,9 @@ function createDateString(array) {
 }
 
 
-// transform data
+/*
+* transform data
+*/
 function transformData(data, element) {
 
   data = JSON.parse(data);
@@ -43,20 +48,19 @@ function transformData(data, element) {
       }
     },
     series: [{
-      name: 'price',
+      name: 'High',
+      color: 'rgb(37, 94, 179)',
+      data: []
+    }, {
+      name: 'Low',
       color: 'darkgrey',
       data: []
     }, {
-      name: 'max',
-      color: 'pink',
-      data: []
-    }, {
-      name: 'min',
-      color: 'lightBlue',
+      name: 'Price',
+      color: 'rgb(37, 94, 179)',
       data: []
     }]
   };
-
 
   data.rows.forEach(function(row){
 
@@ -73,29 +77,43 @@ function transformData(data, element) {
 
     //fill transData series
     var AVG = (row.value.max + row.value.min) / 2;
-    transData.series[0].data.push([date, AVG]);
+    transData.series[2].data.push([date, parseFloat(AVG.toFixed(5))]);
 
     //only add to array when there's a difference
-    if (AVG !== row.value.max) {
-      transData.series[1].data.push([date,row.value.max]);
-      transData.series[2].data.push([date,row.value.min]);
-    }
 
+      transData.series[0].data.push([date, parseFloat(row.value.max.toFixed(5))]);
+      transData.series[1].data.push([date, parseFloat(row.value.min.toFixed(5))]);
   });
 
   generateChart(transData, element);
 }
 
-//create graph on page based on incoming element and data
-function generateChart(data, element){
 
-  console.log('highchart data: ', data);
+/*
+* create graph on page based on incoming element and data
+*/
+function generateChart(data, element){
 
   //create graph
   var chart = Highcharts.stockChart({
         chart: {
             renderTo: element,
-            type: 'line'
+            type: 'line',
+            width: 500,
+            events: {
+              load: function () {
+                  // set up the updating of the chart each interval
+                  setInterval(function () {
+                      updateChart(data.yAxis.title.text, chart);
+                  }, 30000);
+              }
+            }
+        },
+        rangeSelector : {
+          inputEnabled:false
+        },
+        exporting: {
+          enabled: false
         },
         title: {
             text: data.title
@@ -111,9 +129,52 @@ function generateChart(data, element){
 }
 
 
+/*
+* Update chart with latest entry
+*/
+function updateChart(view, chart){
+
+  var view = view.split(" ").splice(0,2).join("-")
+
+  //URL variables
+  var HREF = window.location.href;
+  var URL = HREF + "getticker/latest?view=" + view;
+
+  //get data
+  httpData(URL,'GET',"", function(res){
+
+    //parse data
+    data = JSON.parse(res);
+
+    //convert data
+    var row = data.rows[0];
+
+    //make date array
+    var dateArr = [];
+    for (var i = 1; i < row.key.length; i++) {
+      dateArr.push((row.key[i]));
+    }
+    //create date object
+    var dateObj = new Date(createDateString(dateArr));
+    var date = dateObj.getTime();
+    var val = parseFloat(row.value.max.toFixed(5))
+
+    console.log('adding date and value:', date, val);
+    chart.series[2].addPoint([date, val])
+
+  });
+
+}
 
 
-// Load when document is ready
+/*
+* Load when DOM is ready
+*/
 $(document).ready(function() {
-    getTicker("BTC-EUR", 5, "demo");
+    getTicker("BTC-EUR", 6, "graph1");
+    getTicker("XRP-EUR", 6, "graph2");
+    getTicker("DOGE-EUR", 6, "graph3");
+    getTicker("RDD-EUR", 6, "graph4");
+    getTicker("STRAT-EUR", 6, "graph5");
+    getTicker("DGB-EUR", 6, "graph6");
 });
